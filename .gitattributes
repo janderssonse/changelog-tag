@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Josef Andersson
+#
+# SPDX-License-Identifier: CC0-1.0
+CHANGELOG.md merge=union
+
+# Set default behavior to automatically normalize line endings.
+* text=auto
+
+# Force bash scripts to always use LF line endings so that if a repo is accessed
+# in Unix via a file share from Windows, the scripts will work.
+*.sh,*.bats text eol=lf

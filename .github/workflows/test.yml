@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: Josef Andersson
+#
+# SPDX-License-Identifier: CC0-1.0
+
+name: Bats Test
+
+on: [workflow_call] # yamllint disable-line rule:truthy
+
+jobs:
+  run-bats-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 7
+
+      - name: Download bats and run tests
+        run: |
+          git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.12.0
+          . "$HOME/.asdf/asdf.sh"
+          asdf plugin add semver
+          asdf plugin add git-chglog
+          asdf install git-chglog latest
+          asdf global git-chglog latest
+          development/install_bats.sh
+          #development/lib/bats/bin/bats --print-output-on-failure --show-output-of-passing-tests --verbose-run src/test
+          development/lib/bats/bin/bats src/test

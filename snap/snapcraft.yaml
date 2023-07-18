@@ -1,0 +1,72 @@
+# SPDX-FileCopyrightText: Josef Andersson
+#
+# SPDX-License-Identifier: CC0-1.0
+
+name: changelog-tag # you probably want to 'snapcraft register <name>
+title: Changelog Tag
+base: core22
+adopt-info: copy-scripts
+contact: josef.andersson@gmail.com
+icon: snap/gui/logo.png
+license: GPL-3.0-or-later
+summary: Command-line Changelog generator and SemVer tag util
+description: |
+  Generate a Changelog from an Conventional Commits Git history.
+  Tags (SemVer), and updates the project version (if mvn, npm, gradle). Optional interactive mode.
+assumes:
+  - snapd2.59
+architectures:
+  - build-on: amd64
+    build-for: amd64
+  - build-on: [amd64, arm64]
+    build-for: arm64
+grade: devel
+confinement: strict
+
+parts:
+  copy-scripts:
+    plugin: dump
+    source: .
+    organize:
+      src/changelog_tag.sh: usr/bin/changelog_tag
+      src/changelog_tag_templates: usr/bin/changelog_tag_templates
+    stage-packages:
+      - openjdk-17-jdk-headless
+      - maven
+      - git
+      - openssh-client
+      - npm
+    override-prime: |
+      craftctl default
+      rm -rf usr/lib/jvm/java-11-* # remove jdk11 residue
+    override-build: |
+      craftctl default
+      craftctl set version=$(git describe --abbrev=0 --tags || echo 'v0.0.1')
+  build-gitchglog:
+    build-snaps:
+      - go
+    plugin: go
+    source-type: git
+    source: https://github.com/git-chglog/git-chglog
+
+plugs:
+  etc-gitconfig:
+    interface: system-files
+    read:
+      - /etc/gitconfig
+  gitconfig:
+    interface: personal-files
+    read:
+      - $HOME/.gitconfig
+      - $HOME/.config/git
+
+apps:
+  changelog-tag:
+    environment:
+      HOME: $SNAP_REAL_HOME
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-17-openjdk-${SNAP_ARCH}
+      PATH: $PATH:$SNAP/usr/share/maven:$SNAP/usr/share/maven/bin
+    command: /usr/bin/changelog_tag
+    plugs:
+      - gitconfig
+      - etc-gitconfig
