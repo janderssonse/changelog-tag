@@ -20,8 +20,11 @@ architectures:
     build-for: amd64
   - build-on: [amd64, arm64]
     build-for: arm64
+
 grade: devel
 confinement: strict
+
+compression: lzo
 
 parts:
   copy-scripts:
@@ -58,7 +61,7 @@ plugs:
     interface: personal-files
     read:
       - $HOME/.gitconfig
-      - $HOME/.config/git
+      - $HOME/.config/git/config
 
 apps:
   changelog-tag:

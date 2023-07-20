@@ -84,13 +84,13 @@ $ asdf global install nodejs 20.4.0
 
 #### Running the Snap
 
-Currently, the Snap is not published to the official store (not ready for prime time yet).
+Currently, the Snap is not published to the official store.
 So, have a look under [Actions/Artifacts](https://github.com/janderssonse/changelog-tag/actions/)
 and get the latest build.
 
 
-As the Snap is not published on the official Snap store yet, you have to add --devmode flag.
-I guess --dangerous would work as fine.
+As the Snap is not published on the official Snap store and still has a problem with 
+[connecting to host SSH-AGENT](https://forum.snapcraft.io/t/examples-of-snap-running-ssh-agent/36044), you have to add --devmode flag.
 
 ```shell
 snap install --devmode ./changelog-tag_v0.0.1_amd64.snap
@@ -207,5 +207,5 @@ Most other files are under CC0, but check the SPDX-headers if curious.
 
 * [Git Changelog Generator](https://github.com/git-chglog/git-chglog)
 * [The Bats project](https://github.com/bats-core/) - for making us create robust Bash-scripts.
-* [Dannelof](https://github.com/danneleaf) - for the patch in an earlier incarnation of this util.
+* [Danneleaf](https://github.com/danneleaf) - for the patch in an earlier incarnation of this util.
 * [Digg](https://github.com/diggsweden) for some of the CC0 texts from their Open Source Project Template.
