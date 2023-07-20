@@ -120,6 +120,7 @@ validate_basic_ssh_conf() {
   ssh-add -l >/dev/null
   if [[ "$?" -eq 2 ]]; then
     # shellcheck disable=SC2016
+
     err "Tested ssh-add -l, failed - is the ssh-agent running? Hint: Run ${YELLOW}'eval \$(ssh-agent -s)'${NC}"
   fi
 
@@ -377,58 +378,45 @@ calculate_next_version() {
 
 tag_with_next_version() {
 
-  check_interactive "Tag the project with calculated Git tag ${NEXT_TAG}? (y/n): "
-
   local tag_err_status=''
   tag_err_status=$(git tag -s "${NEXT_TAG}" -m "${NEXT_TAG}" 2>&1)
 
-  if [[ "${APPLY_ACTION}" == 'y' ]]; then
-
-    if [[ -z $tag_err_status ]]; then
-      info "${GREEN} ${CHECKMARK} ${NC} Tagged (signed): ${YELLOW}${NEXT_TAG}${NC}"
-    else
-      err "Something went wrong when running Git tag -s ${NEXT_TAG} -m ${NEXT_TAG}, exiting. Verify your gpg or ssh signing Git signing conf"
-    fi
-
+  if [[ -z $tag_err_status ]]; then
+    info "${GREEN} ${CHECKMARK} ${NC} Tagged (signed): ${YELLOW}${NEXT_TAG}${NC}"
   else
-    info "${YELLOW} Skipped Git tagging!${NC}"
+    err "Something went wrong when running Git tag -s ${NEXT_TAG} -m ${NEXT_TAG}, exiting. Verify your gpg or ssh signing Git signing conf"
   fi
+
 }
 
 generate_changelog() {
-  check_interactive "Generate a Changelog? (y/n): "
 
-  if [[ "${APPLY_ACTION}" == 'y' ]]; then
+  # git-chlglog needs a repourl to generate links
+  local repourl
 
-    # git-chlglog needs a repourl to generate links
-    local repourl
-
-    if [[ -n "${INPUT_REPOURL}" ]]; then
-      repourl="${INPUT_REPOURL}"
-    else
-      repourl=$(git config --get remote.origin.url)
-      repourl="${repourl::-4}" #remove.git
-      repourl=$(echo "${repourl}" | sed "s/git@gitlab.com:/https:\/\/gitlab.com\//")
-      repourl=$(echo "${repourl}" | sed "s/git@github.com:/https:\/\/github.com\//")
-
-    fi
-
-    local scriptdir
-    scriptdir=$(dirname -- "$0")
-
-    local git_chglog_conf="${scriptdir}/changelog_tag_templates/git-chglog-gl.yml"
-
-    # Different styles for gitlab/github
-    if [[ "${repourl}" == *'github'* ]]; then
-      git_chglog_conf="${scriptdir}/changelog_tag_templates/git-chglog-gh.yml"
-    fi
-
-    #info "Generate changelog ........ ${repourl}"
-    git-chglog --repository-url "${repourl}" -c "${git_chglog_conf}" -o CHANGELOG.md
-    info "${GREEN} ${CHECKMARK} ${NC} Generated changelog as ${YELLOW}${PROJECT_ROOT_FOLDER}CHANGELOG.md${NC}"
+  if [[ -n "${INPUT_REPOURL}" ]]; then
+    repourl="${INPUT_REPOURL}"
   else
-    info "${YELLOW} Skipped Changelog generation!${NC}"
+    repourl=$(git config --get remote.origin.url)
+    repourl="${repourl::-4}" #remove.git
+    repourl=$(echo "${repourl}" | sed "s/git@gitlab.com:/https:\/\/gitlab.com\//")
+    repourl=$(echo "${repourl}" | sed "s/git@github.com:/https:\/\/github.com\//")
+
   fi
+
+  local scriptdir
+  scriptdir=$(dirname -- "$0")
+
+  local git_chglog_conf="${scriptdir}/changelog_tag_templates/git-chglog-gl.yml"
+
+  # Different styles for gitlab/github
+  if [[ "${repourl}" == *'github'* ]]; then
+    git_chglog_conf="${scriptdir}/changelog_tag_templates/git-chglog-gh.yml"
+  fi
+
+  #info "Generate changelog ........ ${repourl}"
+  git-chglog --repository-url "${repourl}" -c "${git_chglog_conf}" -o CHANGELOG.md
+  info "${GREEN} ${CHECKMARK} ${NC} Generated changelog as ${YELLOW}${PROJECT_ROOT_FOLDER}CHANGELOG.md${NC}"
 }
 
 update_npm_version() {
@@ -453,23 +441,17 @@ update_gradle_version() {
 }
 
 update_projectfile_version() {
-  check_interactive "Set the project version to ${NEXT_TAG}? (y/n): "
 
-  if [[ "${APPLY_ACTION}" == 'y' ]]; then
-
-    if [[ "${PROJECT_TYPE}" == "mvn" ]]; then
-      update_pom_version
-    elif [[ "${PROJECT_TYPE}" == "npm" ]]; then
-      update_npm_version
-    elif [[ "${PROJECT_TYPE}" == "gradle" ]]; then
-      update_gradle_version
-    else
-      info "${YELLOW} Skipped project file version update, as there was no project type found. Type: ${PROJECT_TYPE} File: ${PROJECT_FILE}${NC}"
-    fi
-
+  if [[ "${PROJECT_TYPE}" == "mvn" ]]; then
+    update_pom_version
+  elif [[ "${PROJECT_TYPE}" == "npm" ]]; then
+    update_npm_version
+  elif [[ "${PROJECT_TYPE}" == "gradle" ]]; then
+    update_gradle_version
   else
-    info "${YELLOW} Skipped project file version update!${NC}"
+    info "${YELLOW} Skipped project file version update, as there was no project type found. Type: ${PROJECT_TYPE} File: ${PROJECT_FILE}${NC}"
   fi
+
 }
 
 move_tag_to_release_commit() {
@@ -483,25 +465,22 @@ move_tag_to_release_commit() {
 
 push_release_commit() {
 
-  check_interactive "Git push your latest commit (and tag) to remote? (y/n). Would push to origin, branch: ${INPUT_GIT_BRANCH_NAME}: "
-
   if [[ "${INPUT_GIT_BRANCH_NAME}" == "none" ]]; then
     info "${YELLOW}No Git branch was given (option -b | --git-branch-name). Skipping final Git push. ${NC}"
-  elif [[ "${APPLY_ACTION}" == 'y' ]]; then
-    if [[ -z "${INPUT_GIT_BRANCH_NAME}" ]]; then
-      info "${YELLOW}INPUT_GIT_BRANCH_NAME was empty, skipping git push. Set branch with -b/--git-branch-name${NC}"
-      return 0
-    fi
-
-    #-- we could use --atomic here, but on real life tests traditional pipelines are acting on push OR push tag - not both
-    # so...lets do two seperate "events"
-    git push origin "${INPUT_GIT_BRANCH_NAME}"
-    git push origin "${NEXT_TAG}"
-
-    info "${GREEN} ${CHECKMARK} ${NC} Git pushed tag and release commit to branch ${INPUT_GIT_BRANCH_NAME}"
-  else
-    info "${YELLOW} Skipped git push!${NC}"
+    return 0
   fi
+
+  if [[ -z "${INPUT_GIT_BRANCH_NAME}" ]]; then
+    info "${YELLOW}INPUT_GIT_BRANCH_NAME was empty, skipping git push. Set branch with -b/--git-branch-name${NC}"
+    return 0
+  fi
+
+  #-- we could use --atomic here, but on real life tests traditional pipelines are acting on push OR push tag - not both
+  # so...lets do two seperate "events"
+  git push origin "${INPUT_GIT_BRANCH_NAME}"
+  git push origin "${NEXT_TAG}"
+
+  info "${GREEN} ${CHECKMARK} ${NC} Git pushed tag and release commit to branch ${INPUT_GIT_BRANCH_NAME}"
 }
 
 package_lock_exists() {
@@ -519,38 +498,38 @@ git_add() {
 }
 
 commit_changelog_and_projectfile() {
-  check_interactive "Commit a release commit with the Changelog and projectfile? (y/n): "
 
-  if [[ "${APPLY_ACTION}" == 'y' ]]; then
-    local commit_msg="chore: release ${NEXT_TAG}"
-    git_add CHANGELOG.md
+  local commit_msg="chore: release ${NEXT_TAG}"
+  git_add CHANGELOG.md
 
-    if [[ -n "${PROJECT_FILE}" ]]; then
+  if [[ -n "${PROJECT_FILE}" ]]; then
 
-      git_add "${PROJECT_FILE}"
+    git_add "${PROJECT_FILE}"
 
-      if [[ "${PROJECT_TYPE}" == 'npm' ]]; then
-        local have_package_lock
-        have_package_lock=$(package_lock_exists)
+    if [[ "${PROJECT_TYPE}" == 'npm' ]]; then
+      local have_package_lock
+      have_package_lock=$(package_lock_exists)
 
-        if [[ -n "${have_package_lock}" ]]; then
-          git_add "${PROJECT_ROOT_FOLDER}package-lock.json"
-        fi
+      if [[ -n "${have_package_lock}" ]]; then
+        git_add "${PROJECT_ROOT_FOLDER}package-lock.json"
       fi
     fi
+  fi
 
-    git commit -q --signoff --gpg-sign -m "${commit_msg}"
+  git commit -q --signoff --gpg-sign -m "${commit_msg}"
 
-    if [[ -n ${PROJECT_FILE} ]]; then
-      info "${GREEN} ${CHECKMARK} ${NC} Added and committed ${YELLOW}CHANGELOG.md ${PROJECT_FILE}${NC}. Commit message: ${YELLOW}${commit_msg}${NC}"
-    else
-      info "${GREEN} ${CHECKMARK} ${NC} Added and committed ${YELLOW}CHANGELOG.md${NC}. Commit message: ${YELLOW}${commit_msg}${NC}"
-    fi
+  if [[ -n ${PROJECT_FILE} ]]; then
+    info "${GREEN} ${CHECKMARK} ${NC} Added and committed ${YELLOW}CHANGELOG.md ${PROJECT_FILE}${NC}. Commit message: ${YELLOW}${commit_msg}${NC}"
+  else
+    info "${GREEN} ${CHECKMARK} ${NC} Added and committed ${YELLOW}CHANGELOG.md${NC}. Commit message: ${YELLOW}${commit_msg}${NC}"
+  fi
 
-    move_tag_to_release_commit
+  move_tag_to_release_commit
+  check_interactive "Git push your latest commit (and tag) to remote? (y/n). Would push to origin, branch: ${INPUT_GIT_BRANCH_NAME}: "
+  if [[ "${APPLY_ACTION}" == 'y' ]]; then
     push_release_commit
   else
-    info "${YELLOW} Skipped git commit of changelog and project file!${NC}"
+    info "${YELLOW} Skipped git push of changelog and project file!${NC}"
   fi
 }
 
@@ -559,10 +538,34 @@ run_() {
   pre_run_validation
   set_project_type_or_guess_from_project_file "${PROJECT_ROOT_FOLDER}"
   calculate_next_version
-  tag_with_next_version
-  generate_changelog
-  update_projectfile_version
-  commit_changelog_and_projectfile
+
+  check_interactive "Tag the project with calculated Git tag ${NEXT_TAG}? (y/n): "
+  if [[ "${APPLY_ACTION}" == 'y' ]]; then
+    tag_with_next_version
+  else
+    info "${YELLOW} Skipped Git tagging!${NC}"
+  fi
+
+  check_interactive "Generate a Changelog? (y/n): "
+  if [[ "${APPLY_ACTION}" == 'y' ]]; then
+    generate_changelog
+  else
+    info "${YELLOW} Skipped Changelog generation!${NC}"
+  fi
+
+  check_interactive "Set the project version to ${NEXT_TAG}? (y/n): "
+  if [[ "${APPLY_ACTION}" == 'y' ]]; then
+    update_projectfile_version
+  else
+    info "${YELLOW} Skipped project file version update!${NC}"
+  fi
+
+  check_interactive "Commit a release commit with the Changelog and projectfile? (y/n): "
+  if [[ "${APPLY_ACTION}" == 'y' ]]; then
+    commit_changelog_and_projectfile
+  else
+    info "${YELLOW} Skipped git commit of changelog and project file!${NC}"
+  fi
 
 }
 
