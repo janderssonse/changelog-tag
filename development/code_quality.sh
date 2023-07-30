@@ -52,7 +52,7 @@ store_exit_code() {
 lint() {
   export MEGALINTER_DEF_WORKSPACE='/repo'
   print_header 'LINTER HEALTH (MEGALINTER)'
-  podman run --rm --volume "$(pwd)":/repo -e MEGALINTER_CONFIG='development/mega-linter.yml' -e DEFAULT_WORKSPACE=${MEGALINTER_DEF_WORKSPACE} -e LOG_LEVEL=INFO oxsecurity/megalinter-java:v7.1.0
+  podman run --rm --volume "$(pwd)":/repo -e MEGALINTER_CONFIG='development/mega-linter.yml' -e DEFAULT_WORKSPACE=${MEGALINTER_DEF_WORKSPACE} -e LOG_LEVEL=INFO oxsecurity/megalinter-java:v7.2.1
   store_exit_code "$?" "Lint" "${MISSING} ${RED}Lint check failed, see logs (std out and/or ./megalinter-reports) and fix problems.${NC}\n" "${GREEN}${CHECKMARK}${CHECKMARK} Lint check passed${NC}\n"
   printf '\n\n'
 }
