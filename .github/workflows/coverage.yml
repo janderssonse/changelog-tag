@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: Josef Andersson
+#
+# SPDX-License-Identifier: CC0-1.0
+---
+name: Coverage
+on: [workflow_call] # yamllint disable-line rule:truthy
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: sudo apt-get install -y kcov
+      - run: ./development/install_bats.sh
+      - name: Kcov run
+        shell: bash
+        run: |
+          kcov --bash-dont-parse-binary-dir --exclude-pattern=src/test --include-path=src $PWD/coverage/ ./development/lib/bats/bin/bats ./src/test || true 
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: coverage/*
+
+      - name: Print the Total Coverage
+        id: coverage-percent
+        shell: bash
+        run: |
+
+          COVERAGE_LIMIT=50.00
+          jsonPath=$(readlink coverage/bats)
+          percent_covered=$(jq -r '.percent_covered' <"${jsonPath}/coverage.json")
+
+          pass_limit=$(awk -v n1="${COVERAGE_LIMIT}" -v n2="$percent_covered" 'BEGIN {printf (n1<n2?"true":"false")"\n", n1, n2}')
+
+          #echo "::set-output name=coverage::$pass_limit"
+          printf "Coverage: %s\nLimit: %s\n" "${percent_covered}" "${COVERAGE_LIMIT}"
+          printf "%s\n" "Passed: $pass_limit"
+
+          if [[ "${pass_limit}" == 'false' ]]; then
+            exit 1
+          else
+            exit 0
+          fi
