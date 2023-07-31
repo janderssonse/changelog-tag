@@ -13,7 +13,25 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org) to
 ## [Unreleased]
 
 
+<a name="v0.0.2"></a>
+## [v0.0.2] - 2023-07-31
+### Bug Fixes
+- **snap:** correct the standard git config path
+
+### Code Refactoring
+- move the interactive logic
+
+### Continous Integration
+- add ci kcov coverage check
+
+### Features
+- update to reuse v2
+- **development:** add kcov test coverage
+- **development:** update to megalinter 7.2.1
+
+
 <a name="v0.0.1"></a>
 ## v0.0.1 - 2023-07-18
 
-[Unreleased]: https://github.com/janderssonse/changelog-tag/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/janderssonse/changelog-tag/compare/v0.0.2...HEAD
+[v0.0.2]: https://github.com/janderssonse/changelog-tag/compare/v0.0.1...v0.0.2
