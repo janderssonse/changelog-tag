@@ -28,10 +28,6 @@ jobs:
         shell: bash
         run: |
 
-          local jsonPath
-          local percent_covered
-          local pass_limit
-
           jsonPath=$(readlink coverage/bats)
           percent_covered=$(jq -r '.percent_covered' <"${jsonPath}/coverage.json")
 
