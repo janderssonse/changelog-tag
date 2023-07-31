@@ -31,7 +31,7 @@ jobs:
           jsonPath=$(readlink coverage/bats)
           percent_covered=$(jq -r '.percent_covered' <"${jsonPath}/coverage.json")
 
-          pass_limit=$(awk -v n1="50.00" -v n2="$percent_covered" 'BEGIN {printf (n1<n2?"true":"false")"\n", n1, n2}')
+          pass_limit=$(awk -v n1="60.00" -v n2="$percent_covered" 'BEGIN {printf (n1<n2?"true":"false")"\n", n1, n2}')
 
           #echo "::set-output name=coverage::$pass_limit"
           echo $pass_limit
