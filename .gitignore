@@ -89,3 +89,4 @@ dist/
 **/megalinter-reports/**
 **/*/.gradle
 .vscode
+coverage

@@ -182,7 +182,7 @@ To run the tests:
 ### Linting the project
 
 There is a script that checks code quality, commit history and license compliance. Please run that.
-It is dependent on `podman`, and uses `megalinter`, `reuse-tool`, and `conform` to check for various aspects of quality.
+It is dependent on `podman`, and uses `megalinter`, `reuse-tool`, `conform`, `kcov` to check for various aspects of quality and coverage.
 
 ```shell
 ./development/code_quality.sh

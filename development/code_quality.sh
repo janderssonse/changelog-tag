@@ -20,6 +20,9 @@ readonly YELLOW=$'\e[0;33m'
 readonly CHECKMARK=$'\xE2\x9C\x94'
 readonly MISSING=$'\xE2\x9D\x8C'
 
+#Settings
+COVERAGE_LIMIT=50.00
+
 is_command_available() {
   local COMMAND="${1}"
   local INFO="${2}"
@@ -82,6 +85,39 @@ commit() {
   printf '\n\n'
 }
 
+compareLimit() {
+
+  local pass_limit
+  pass_limit=$(awk -v n1="$1" -v n2="$2" 'BEGIN {printf (n1<n2?"true":"false")"\n", n1, n2}')
+
+  if [[ "${pass_limit}" == 'false' ]]; then
+    store_exit_code "1" "Coverage" "${MISSING} ${RED}Coverage check failed, adjust tests, see reports (coverage/index.html and fix problems.${NC}\n" ""
+  else
+    store_exit_code "0" "Coverage" "" "${GREEN}${CHECKMARK}${CHECKMARK} Coverage check passed${NC}\n"
+  fi
+}
+
+coverage() {
+
+  print_header 'TEST COVERAGE (KCOV)'
+
+  local jsonPath
+  local percent_covered
+
+  kcov \
+    --clean \
+    --bash-dont-parse-binary-dir \
+    --exclude-pattern=src/test \
+    --include-path=src \
+    ./coverage/ ./development/lib/bats/bin/bats ./src/test >/dev/null 2>&1
+
+  jsonPath=$(readlink coverage/bats)
+  percent_covered=$(jq -r '.percent_covered' <"${jsonPath}/coverage.json")
+
+  printf "Coverage: %s\nLimit: %s\n\n" "${percent_covered}" "${COVERAGE_LIMIT}"
+  compareLimit "${COVERAGE_LIMIT}" "${percent_covered}"
+}
+
 check_exit_codes() {
   printf '%b********* CODE QUALITY RUN SUMMARY ******%b\n\n' "${YELLOW}" "${NC}"
 
@@ -97,9 +133,11 @@ check_exit_codes() {
 }
 
 is_command_available 'podman' 'https://podman.io/'
+is_command_available 'kcov' 'https://github.com/SimonKagstrom/kcov'
 
 lint
 license
 commit
+coverage
 
 check_exit_codes

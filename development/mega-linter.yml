@@ -48,5 +48,5 @@ COPYPASTE_JSCPD_ARGUMENTS: --ignore "**/build/**","development/lib/**","build/sn
 BASH_SHFMT_ARGUMENTS: -i 2
 BASH_SHFMT_FILE_EXTENSIONS: [.sh, .bats]
 BASH_SHELLCHECK_FILE_EXTENSIONS: [.sh]
-BASH_SHELLCHECK_FILTER_REGEX_EXCLUDE: .*/development/lib/.*
+BASH_SHELLCHECK_FILTER_REGEX_EXCLUDE: .*/development/lib/.*|.*/coverage/.*
 BASH_SHFMT_FILTER_REGEX_EXCLUDE: .*/development/lib/.*
