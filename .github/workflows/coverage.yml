@@ -33,8 +33,9 @@ jobs:
 
           pass_limit=$(awk -v n1="50.00" -v n2="$percent_covered" 'BEGIN {printf (n1<n2?"true":"false")"\n", n1, n2}')
 
-          echo "::set-output name=coverage::$pass_limit"
+          #echo "::set-output name=coverage::$pass_limit"
           echo $pass_limit
+          echo $percent_covered
 
           if [[ "${pass_limit}" == 'false' ]]; then
             exit 1
