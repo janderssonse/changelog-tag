@@ -11,9 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: sudo apt-get install -y kcov
-      - run: |
-          ./development/install_bats.sh
-          kcov --clean --bash-dont-parse-binary-dir --exclude-pattern=src/test --include-path=src ./coverage/ ./development/lib/bats/bin/bats ./src/test
+      - run: ./development/install_bats.sh
+      - name: Kcov run
+        shell: bash
+        run: kcov --bash-dont-parse-binary-dir --exclude-pattern=src/test --include-path=src ./coverage/ ./development/lib/bats/bin/bats ./src/test
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
