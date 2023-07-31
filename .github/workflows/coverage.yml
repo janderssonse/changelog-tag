@@ -12,12 +12,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: sudo apt-get install -y kcov
       - run: |
-          kcov \
-            --clean \
-            --bash-dont-parse-binary-dir \
-            --exclude-pattern=src/test \
-            --include-path=src \
-            ./coverage/ ./development/lib/bats/bin/bats ./src/test >/dev/null 2>&1
+          kcov --clean --bash-dont-parse-binary-dir --exclude-pattern=src/test --include-path=src ./coverage/ ./development/lib/bats/bin/bats ./src/test
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
