@@ -6,10 +6,11 @@ SPDX-License-Identifier: CC0-1.0
 
 # Changelog Tag
 
+
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/janderssonse/changelog-tag)
 
 Making a nice release commit might indicate a few boring steps - adding a changelog, tagging, update project version. 
-
+TEST workflow
 So why not .. A util script to make an atomic release commit including tag, changelog and updated Project file. Supports mvn, npm or gradle. 
 Relies on Conventional Commits-standard. Sure!
 
