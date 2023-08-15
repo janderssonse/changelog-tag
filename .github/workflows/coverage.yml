@@ -15,7 +15,7 @@ jobs:
       - name: Kcov run
         shell: bash
         run: |
-          kcov --bash-dont-parse-binary-dir --exclude-pattern=src/test --include-path=src $PWD/coverage/ ./development/lib/bats/bin/bats ./src/test || true 
+          kcov --bash-dont-parse-binary-dir --exclude-pattern=src/test --include-path=src $PWD/coverage/ ./development/lib/bats/bin/bats ./src/test || true
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3

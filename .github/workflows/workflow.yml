@@ -29,4 +29,9 @@ jobs:
     uses: ./.github/workflows/test.yml
   snapbuild:
     needs: [test]
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/snapbuild.yml
+  imagebuild:
+    needs: [test]
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/imagebuild.yml

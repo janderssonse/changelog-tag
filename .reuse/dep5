@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Source: https://www.github.com/janderssonse/changelog-tag
 
-Files: snap/gui/*.png docs/img/*.png CHANGELOG.md src/changelog_tag_templates/** src/test/resources/**/*
+Files: snap/gui/*.png docs/img/*.png .tool-versions CHANGELOG.md src/changelog_tag_templates/** src/test/resources/**/*
 Copyright: 2023 Josef Andersson
 License: CC0-1.0
 

@@ -28,7 +28,7 @@ is_command_available() {
   local INFO="${2}"
 
   if ! [ -x "$(command -v "${COMMAND}")" ]; then
-    printf '%b Error:%b %s is not availble in path/installed.\n' "${RED}" "${NC}" "${COMMAND}" >&2
+    printf '%b Error:%b %s is not available in path/installed.\n' "${RED}" "${NC}" "${COMMAND}" >&2
     printf 'See %s for more info about the command.\n' "${INFO}" >&2
     exit 1
   fi
@@ -100,6 +100,8 @@ compareLimit() {
 coverage() {
 
   print_header 'TEST COVERAGE (KCOV)'
+
+  is_command_available './development/lib/bats/bin/bats' ''
 
   local jsonPath
   local percent_covered

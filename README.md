@@ -70,7 +70,7 @@ $ asdf install
 
 # pin the asdf versions
 $ asdf global install git-chglog 0.15.4
-$ asdf global install java adoptopenjdk-jre-17.0.7+7
+$ asdf global install java adoptopenjdk-jre-17.0.8+7
 $ asdf global install maven 3.8.8
 $ asdf global install nodejs 20.4.0
 
@@ -87,7 +87,6 @@ $ asdf global install nodejs 20.4.0
 Currently, the Snap is not published to the official store.
 So, have a look under [Actions/Artifacts](https://github.com/janderssonse/changelog-tag/actions/)
 and get the latest build.
-
 
 As the Snap is not published on the official Snap store and still has a problem with 
 [connecting to host SSH-AGENT](https://forum.snapcraft.io/t/examples-of-snap-running-ssh-agent/36044), you have to add --devmode flag.
@@ -111,7 +110,13 @@ changelog-tag --help
 
 #### Running the Docker image
 
-Currently not supported, work in progress. 
+There is a helpscript which will mount ssh agent and more for you.
+
+```console
+/path/to/repo/you/just/cloned/scripts/run_changelog_release_container.sh '--help'
+```
+
+And you should get an overview of options. NOTE: as you run in an container, arguments will have to be given in one string surrounded by '' as in the example above.
 
 ## Usage
 
