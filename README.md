@@ -82,7 +82,9 @@ $ asdf global install nodejs 20.4.0
 /path/to/changelog-tagrepo/you/just/cloned/src/changelog_tag.sh --help
 ```
 
-#### Running the Snap
+#### Alternatives to run script
+
+1. #### Running the Snap :
 
 Currently, the Snap is not published to the official store.
 So, have a look under [Actions/Artifacts](https://github.com/janderssonse/changelog-tag/actions/)
@@ -108,7 +110,7 @@ Now, you can do an --help
 changelog-tag --help
 ```
 
-#### Running the Docker image
+2. #### Running the Docker image :
 
 There is a helpscript which will mount ssh agent and more for you.
 
