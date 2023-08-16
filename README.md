@@ -8,9 +8,9 @@ SPDX-License-Identifier: CC0-1.0
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/janderssonse/changelog-tag)
 
-Making a nice release commit might indicate a few boring steps - adding a changelog, tagging, update project version. 
+Making a nice release commit might indicate a few boring steps - adding a changelog, tagging, update project version.
 
-So why not .. A util script to make an atomic release commit including tag, changelog and updated Project file. Supports mvn, npm or gradle. 
+So why not .. A util script to make an atomic release commit including tag, changelog and updated Project file. Supports mvn, npm or gradle.
 Relies on Conventional Commits-standard. Sure!
 
 Briefly, this script:
@@ -41,11 +41,13 @@ Quite early version, but useable.
 
 ### Requirements
 
-* Your project is (mostly) following the Conventional Commits Standard.
-* Your Git Settings is configured to sign and tag with SSH.
-* If you are not running the Snap, but go for the script directly, you will need a few dependencies. 
+- Your project is (mostly) following the Conventional Commits Standard.
+- Your Git Settings is configured to sign and tag with SSH.
+- If you are not running the Snap, but go for the script directly, you will need a few dependencies.
 
-#### Running the script directly
+### Running the application
+
+#### Run alternative 1: Run as a Bash script
 
 - Clone this repo
 
@@ -53,12 +55,12 @@ Quite early version, but useable.
 git@github.com:janderssonse/changelog-tag.git
 ```
 
-- Install needed dependencies. 
- 
+- Install needed dependencies.
+
  A simple suggestion is to install the nice runtime version manager [asdf-vm](https://asdf-vm.com/guide/getting-started.html).
 
  Following are a few commands that adds the plugins and then installs them for you.
- 
+
  _Note, it will set them globally in this example, but you can later switch versions with asdf, if needed for other projects, see the asdf-vm documentation._
 
 ```shell
@@ -82,13 +84,13 @@ $ asdf global install nodejs 20.4.0
 /path/to/changelog-tagrepo/you/just/cloned/src/changelog_tag.sh --help
 ```
 
-#### Running the Snap
+#### Run alternative 2: Run as a Snap
 
 Currently, the Snap is not published to the official store.
 So, have a look under [Actions/Artifacts](https://github.com/janderssonse/changelog-tag/actions/)
 and get the latest build.
 
-As the Snap is not published on the official Snap store and still has a problem with 
+As the Snap is not published on the official Snap store and still has a problem with
 [connecting to host SSH-AGENT](https://forum.snapcraft.io/t/examples-of-snap-running-ssh-agent/36044), you have to add --devmode flag.
 
 ```shell
@@ -108,7 +110,7 @@ Now, you can do an --help
 changelog-tag --help
 ```
 
-#### Running the Docker image
+#### Run alternative 3: Run as a container image
 
 There is a helpscript which will mount ssh agent and more for you.
 
@@ -135,18 +137,15 @@ A picture says more than a thousand words.
 </figure>
 
 <figure>
-<img src="./docs/img/changelog_tag_log.png " alt="changelog_tag log" width="800"/>  
+<img src="./docs/img/changelog_tag_generated.png " alt="changelog_tag log" width="800"/>  
 <figcaption><em>changelog_tag generated changelog example</em></figcaption>
 </figure>
 
-<figure>
-<img src="./docs/img/changelog_tag_commit_example.png " alt="changelog_tag commit example" width="800"/>  
-<figcaption><em>changelog_tag commit example - project file, changelog, tag and release commit message</em></figcaption>
-</figure>
 
 ## Known issues
 
 Roadmap:
+
 - More choices regarding configuration
 - Fully support prerelease and build options
 - Rewrite in golang to ease maintenance etc
@@ -176,6 +175,7 @@ You can find a helper script for installing bats-core with dependencies in the (
 ```shell
 ./development/install_bats.sh
 ```
+
 _Note: The bats files are installed under the `<projectdir>/development/lib`, not globally on on your system_
 
 To run the tests:
@@ -192,6 +192,7 @@ It is dependent on `podman`, and uses `megalinter`, `reuse-tool`, `conform`, `kc
 ```shell
 ./development/code_quality.sh
 ```
+
 _Note: megalinter checks a lot of things, shellcheck etc, see the `development/mega-linter.yml` for enabled linters,_
 
 ----
@@ -210,7 +211,7 @@ Most other files are under CC0, but check the SPDX-headers if curious.
 
 ## Credits and References
 
-* [Git Changelog Generator](https://github.com/git-chglog/git-chglog)
-* [The Bats project](https://github.com/bats-core/) - for making us create robust Bash-scripts.
-* [Danneleaf](https://github.com/danneleaf) - for the patch in an earlier incarnation of this util.
-* [Digg](https://github.com/diggsweden) for some of the CC0 texts from their Open Source Project Template.
+- [Git Changelog Generator](https://github.com/git-chglog/git-chglog)
+- [The Bats project](https://github.com/bats-core/) - for making us create robust Bash-scripts.
+- [Danneleaf](https://github.com/danneleaf) - for the patch in an earlier incarnation of this util.
+- [Digg](https://github.com/diggsweden) for some of the CC0 texts from their Open Source Project Template.
