@@ -13,6 +13,16 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org) to
 ## [Unreleased]
 
 
+<a name="v0.0.3"></a>
+## [v0.0.3] - 2024-02-19
+### Documentation
+- update example images and run options
+
+### Features
+- autoscrub basic auth
+- add docker image publish
+
+
 <a name="v0.0.2"></a>
 ## [v0.0.2] - 2023-07-31
 ### Bug Fixes
@@ -33,5 +43,6 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org) to
 <a name="v0.0.1"></a>
 ## v0.0.1 - 2023-07-18
 
-[Unreleased]: https://github.com/janderssonse/changelog-tag/compare/v0.0.2...HEAD
+[Unreleased]: https://github.com/janderssonse/changelog-tag/compare/v0.0.3...HEAD
+[v0.0.3]: https://github.com/janderssonse/changelog-tag/compare/v0.0.2...v0.0.3
 [v0.0.2]: https://github.com/janderssonse/changelog-tag/compare/v0.0.1...v0.0.2
