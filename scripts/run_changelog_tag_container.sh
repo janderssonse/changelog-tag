@@ -20,7 +20,7 @@ printf "%s\n" "Choosen repo path: ${REPO_PATH}"
 
 printf "%s\n" "Choosen git config path: ${GITCONFIG}"
 
-docker run --env ARGS="${ARGS}" --volume "${GITCONFIG}":/etc/gitconfig:ro \
+podman run --env ARGS="${ARGS}" --volume "${GITCONFIG}":/etc/gitconfig:ro \
   --volume ~/.ssh/known_hosts:/etc/ssh/ssh_known_hosts:ro \
   --user "$UID":"$GID" --network host \
   --workdir="/app/repo" \

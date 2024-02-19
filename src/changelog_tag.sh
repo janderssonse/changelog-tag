@@ -393,12 +393,15 @@ generate_changelog() {
 
   # git-chlglog needs a repourl to generate links
   local repourl
+  # autoremove basic auth from URL for both http and https if user tries to add it
+  local sed_cmd='s/\(https\{0,1\}:\/\/\)\([^:@]*\):[^@]*@\([^/]*\)/\1\3/'
 
   if [[ -n "${INPUT_REPOURL}" ]]; then
     repourl="${INPUT_REPOURL}"
   else
     repourl=$(git config --get remote.origin.url)
-    repourl="${repourl::-4}" #remove.git
+    repourl="${repourl::-4}" #remove.g
+    repourl=$(echo "${repourl}" | sed -e "$sed_cmd")
     repourl=$(echo "${repourl}" | sed "s/git@gitlab.com:/https:\/\/gitlab.com\//")
     repourl=$(echo "${repourl}" | sed "s/git@github.com:/https:\/\/github.com\//")
 

@@ -147,17 +147,35 @@ function tag_with_next_version_success_and_fail_test() { #@test
 function generate_changelog_success() { #@test
 
   git() {
-    echo "mockgit"
+    echo "http://a.b.git"
   }
   git-chglog() {
     echo "$@"
   }
 
   run generate_changelog
+  assert_output --partial 'repository-url http://a.b'
   assert_output --partial 'git-chglog-gl.yml -o CHANGELOG.md'
   assert_output --partial "Generated changelog as ${YELLOW}./CHANGELOG.md${NC}"
   assert_success
 
+}
+
+function generate_changelog_autoscrub_basic_auth_success() { #@test
+  # secretlint-disable
+  git() {
+    echo "https://basic:auth@a.b.git"
+  }
+  git-chglog() {
+    echo "$@"
+  }
+
+  # secretlint-enable
+  run generate_changelog
+  assert_output --partial 'repository-url https://a.b'
+  assert_output --partial 'git-chglog-gl.yml -o CHANGELOG.md'
+  assert_output --partial "Generated changelog as ${YELLOW}./CHANGELOG.md${NC}"
+  assert_success
 }
 
 function update_npm_success() { #@test

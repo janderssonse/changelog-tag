@@ -112,7 +112,7 @@ changelog-tag --help
 
 #### Run alternative 3: Run as a container image
 
-There is a helpscript which will mount ssh agent and more for you.
+There is a helpscript which will mount ssh agent and more for you, expecting Podman
 
 ```console
 /path/to/repo/you/just/cloned/scripts/run_changelog_release_container.sh '--help'
