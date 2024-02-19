@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: CC0-1.0
 
+target
+pom.xml.versionsBackup
 report/
 development/lib/
 

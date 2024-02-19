@@ -33,5 +33,7 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org) to
 <a name="v0.0.1"></a>
 ## v0.0.1 - 2023-07-18
 
-[Unreleased]: https://github.com/janderssonse/changelog-tag/compare/v0.0.2...HEAD
-[v0.0.2]: https://github.com/janderssonse/changelog-tag/compare/v0.0.1...v0.0.2
+[Unreleased]: https://github.com/janderssonse/changelog-tag.git
+/compare/v0.0.2...HEAD
+[v0.0.2]: https://github.com/janderssonse/changelog-tag.git
+/compare/v0.0.1...v0.0.2
