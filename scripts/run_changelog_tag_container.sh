@@ -13,7 +13,7 @@ REPO_PATH="$2"                     #FULL PATH to the Repo you are working on, de
 GITCONFIG="${3:-$HOME/.gitconfig}" #FULL PATH to your gitconfig, defaults to $HOME/gitconfig
 
 if [[ -z "${REPO_PATH}" ]]; then
-	REPO_PATH=$(pwd)
+  REPO_PATH=$(pwd)
 fi
 
 printf "%s\n" "Choosen repo path: ${REPO_PATH}"
@@ -21,14 +21,14 @@ printf "%s\n" "Choosen repo path: ${REPO_PATH}"
 printf "%s\n" "Choosen git config path: ${GITCONFIG}"
 
 podman run --env ARGS="${ARGS}" --volume "${GITCONFIG}":/etc/gitconfig:ro \
-	--volume ~/.ssh/known_hosts:/etc/ssh/ssh_known_hosts:ro \
-	--privileged --network host \
-	--workdir="/app/repo" \
-	--volume="/etc/group:/etc/group:ro" \
-	--volume="/etc/passwd:/etc/passwd:ro" \
-	--volume="/etc/shadow:/etc/shadow:ro" \
-	--volume="$HOME/.m2/repository:/app/.m2/repository:ro" \
-	-v "${REPO_PATH}":/app/repo \
-	-v "$SSH_AUTH_SOCK:$SSH_AUTH_SOCK" \
-	-e SSH_AUTH_SOCK="${SSH_AUTH_SOCK}" \
-	--rm -it ghcr.io/janderssonse/changelog_tag:latest
+  --volume ~/.ssh/known_hosts:/etc/ssh/ssh_known_hosts:ro \
+  --privileged --network host \
+  --workdir="/app/repo" \
+  --volume="/etc/group:/etc/group:ro" \
+  --volume="/etc/passwd:/etc/passwd:ro" \
+  --volume="/etc/shadow:/etc/shadow:ro" \
+  --volume="$HOME/.m2/repository:/app/.m2/repository:ro" \
+  -v "${REPO_PATH}":/app/repo \
+  -v "$SSH_AUTH_SOCK:$SSH_AUTH_SOCK" \
+  -e SSH_AUTH_SOCK="${SSH_AUTH_SOCK}" \
+  --rm -it ghcr.io/janderssonse/changelog_tag:latest

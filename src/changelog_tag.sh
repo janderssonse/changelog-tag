@@ -328,13 +328,28 @@ is_command_installed() {
 
   if ! [[ -x "$(command -v "${prog}")" ]]; then
 
-    info "Tool ${YELLOW}${prog}${NC} could not be found, make sure it is installed!" \
+    info "Tool ${YELLOW}${prog}${NC} could not be found, make sure it is installed" \
       "Recommended to use the asdf-vm version if there is a plugin for the tool."
     info "See ${GREEN}${link}${NC} or your package manager for install options."
     exit 1
   fi
+
 }
 
+is_command_runnable() {
+  local prog=$1
+  local link=$2
+
+  # check unpinned asdf version err
+  local errorstatus
+  errorstatus="$($prog 2>&1)"
+
+  if [[ "${errorstatus}" == *"No version is set"* ]]; then
+    info "Tool ${YELLOW}${prog}${NC} could not be run, and it seems asdf was used, make sure it is pinned with asdf"
+    info "See ${GREEN}${link}${NC} or your package manager for install options."
+    exit 1
+  fi
+}
 calculate_next_version() {
 
   #Tag was explictly given
@@ -633,6 +648,7 @@ main() {
 
   is_command_installed "git" "https://git-scm.com/"
   is_command_installed "git-chglog" "https://github.com/git-chglog/git-chglog"
+  is_command_runnable "git-chglog" "https://github.com/git-chglog/git-chglog"
   is_command_installed "npm" "https://github.com/asdf-vm/asdf-nodejs"
   is_command_installed "mvn" "https://github.com/Proemion/asdf-maven"
   is_command_installed "ssh-add" ""

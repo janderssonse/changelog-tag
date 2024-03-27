@@ -70,11 +70,11 @@ $ cut -d' ' -f1 .tool-versions | xargs -i asdf plugin add {}
 # install all listed .tool-versions plugins versions
 $ asdf install
 
-# pin the asdf versions
-$ asdf global install git-chglog 0.15.4
-$ asdf global install java adoptopenjdk-jre-17.0.8+7
-$ asdf global install maven 3.8.8
-$ asdf global install nodejs 20.4.0
+# pin the asdf versions (if you need)
+$ asdf global git-chglog 0.15.4
+$ asdf global java adoptopenjdk-jre-17.0.8+7
+$ asdf global maven 3.8.8
+$ asdf global nodejs 20.4.0
 
 ```
 

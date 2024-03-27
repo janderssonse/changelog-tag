@@ -30,6 +30,19 @@ function is_command_installed_fails_without_command_installed_or_success_if_comm
   assert_success
 }
 
+function is_command_runnable_fails_without_command_runnable_or_success_if_command_found { #@test
+
+  mocko() {
+    echo "No version is set"
+  }
+
+  run is_command_runnable "mocko" "linke"
+  assert_failure
+
+  run is_command_runnable "macko"
+  assert_success
+}
+
 function validate_and_split_semver() { #@test
 
   run validate_and_split_semver 'v1.2.3'
