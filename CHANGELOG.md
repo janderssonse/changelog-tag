@@ -13,6 +13,13 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org) to
 ## [Unreleased]
 
 
+<a name="v0.0.4"></a>
+## [v0.0.4] - 2024-03-27
+### Bug Fixes
+- add check for non pinned git-chglog
+- relax container run helper script
+
+
 <a name="v0.0.3"></a>
 ## [v0.0.3] - 2024-02-19
 ### Documentation
@@ -43,6 +50,7 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org) to
 <a name="v0.0.1"></a>
 ## v0.0.1 - 2023-07-18
 
-[Unreleased]: https://github.com/janderssonse/changelog-tag/compare/v0.0.3...HEAD
+[Unreleased]: https://github.com/janderssonse/changelog-tag/compare/v0.0.4...HEAD
+[v0.0.4]: https://github.com/janderssonse/changelog-tag/compare/v0.0.3...v0.0.4
 [v0.0.3]: https://github.com/janderssonse/changelog-tag/compare/v0.0.2...v0.0.3
 [v0.0.2]: https://github.com/janderssonse/changelog-tag/compare/v0.0.1...v0.0.2
