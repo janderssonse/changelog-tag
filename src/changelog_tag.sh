@@ -433,7 +433,7 @@ generate_changelog() {
   fi
 
   #info "Generate changelog ........ ${repourl}"
-  git-chglog --repository-url "${repourl}" -c "${git_chglog_conf}" -o CHANGELOG.md
+  git-chglog --repository-url "${repourl}" -c "${git_chglog_conf}" --sort semver -o CHANGELOG.md
   info "${GREEN} ${CHECKMARK} ${NC} Generated changelog as ${YELLOW}${PROJECT_ROOT_FOLDER}CHANGELOG.md${NC}"
 }
 
